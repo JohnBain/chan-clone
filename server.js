@@ -53,8 +53,8 @@ function renderLayout(content) {
   `
 }
 
-function renderPost(post){
- return  `
+function renderPost(post) {
+  return `
           <div class="row">
             <div class="row-sm-12 col-lg-12">
             ${post.id} posted by ${post.name} at ${post.createdAt}
@@ -77,7 +77,12 @@ app.get('/', function(req, res) {
       }
       else {
         result.forEach(function(post) {
+          if ((post.img.replace(/\s/g, "") == "") || (post.text.replace(/\s/g, "") == "")) {
+            null
+          }
+          else{
           finalstring += renderPost(post)
+          }
 
         })
         res.send(renderLayout(finalstring))
@@ -87,8 +92,8 @@ app.get('/', function(req, res) {
 
 app.post('/post', function(req, res) {
   console.log(req.body, "HI");
-  conn.query(`INSERT INTO Posts (text, img) VALUES (?, ?)`, [req.body.text, req.body.image], function(err, result){
-    if (err){
+  conn.query(`INSERT INTO Posts (text, img) VALUES (?, ?)`, [req.body.text, req.body.image], function(err, result) {
+    if (err) {
       console.log(err, "Post error")
     }
     else {
